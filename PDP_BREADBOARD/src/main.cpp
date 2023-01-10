@@ -4,7 +4,8 @@
 
 // Define the pins that we will use
 #define SENSOR 33
-#define LED 26
+#define uS_TO_S_FACTOR 1000000
+#define TIME_TO_SLEEP  5
 
 DHT_Unified dht(SENSOR, DHT11);
 
@@ -54,14 +55,18 @@ void setup()
   Serial.print(sensor.resolution);
   Serial.println(F("%"));
   Serial.println(F("------------------------------------"));
-  // put your setup code here, to run once:
-  pinMode(LED, OUTPUT);
-}
 
-void loop()
-{
-  // Delay between measurements.
-  delay(5000);
+  //Configuration du timer
+  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
+  Serial.println("ESP32 réveillé dans " + String(TIME_TO_SLEEP) + " seconds");
+
+  //Rentre en mode Deep Sleep
+  Serial.println("Rentre en mode Deep Sleep");
+  Serial.println(F("------------------------------------"));
+  delay(100);
+  esp_deep_sleep_start();
+  Serial.println("Ceci ne sera jamais affiché");
+
   // Get temperature event and print its value.
   sensors_event_t event;
   dht.temperature().getEvent(&event);
@@ -87,4 +92,9 @@ void loop()
     Serial.print(event.relative_humidity);
     Serial.println(F("%"));
   }
+}
+
+void loop()
+{
+  
 }
