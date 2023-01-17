@@ -56,18 +56,7 @@ void setup()
   Serial.println(F("%"));
   Serial.println(F("------------------------------------"));
 
-  //Configuration du timer
-  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
-  Serial.println("ESP32 réveillé dans " + String(TIME_TO_SLEEP) + " seconds");
-
-  //Rentre en mode Deep Sleep
-  Serial.println("Rentre en mode Deep Sleep");
-  Serial.println(F("------------------------------------"));
-  delay(100);
-  esp_deep_sleep_start();
-  Serial.println("Ceci ne sera jamais affiché");
-
-  // Get temperature event and print its value.
+    // Get temperature event and print its value.
   sensors_event_t event;
   dht.temperature().getEvent(&event);
   if (isnan(event.temperature))
@@ -92,9 +81,19 @@ void setup()
     Serial.print(event.relative_humidity);
     Serial.println(F("%"));
   }
+
+  //Configuration du timer
+  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
+  Serial.println("ESP32 réveillé dans " + String(TIME_TO_SLEEP) + " seconds");
+
+  //Rentre en mode Deep Sleep
+  Serial.println("Rentre en mode Deep Sleep");
+  Serial.println(F("------------------------------------"));
+  esp_deep_sleep_start();
+  Serial.println("Ceci ne sera jamais affiché");
 }
 
 void loop()
 {
-  
+
 }
